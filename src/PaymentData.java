@@ -24,12 +24,16 @@ public class PaymentData implements Data {
     payment = new Payment(getId(),invoice.id,getDate(),getType(),getAmount(),
             getName(),getAccountNum(),getMonth(),getYear(),"Mastercard");
 
-    String insertString =
+    if(payment.type.equals("CA")) {
+      String insertString =
             "INSERT INTO "+tableName+" VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
                     + getDateString(payment.date)+"','"+payment.type+"',"+format(payment.amount);
-    if(payment.type.equals("CA")) {
+
       return insertString+");\n";
     } else {
+      String insertString = "INSERT INTO "+tableName+" (payment_id,invoice_id,payment_date,"
+              + "payment_type,payment_amount) VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
+              + getDateString(payment.date)+"','"+payment.type+"',"+format(payment.amount);
       return insertString+",'"+ payment.accountHolder+"',"+payment.accountNumber+","+payment.expirationMonth
               + ","+payment.expirationYear+",'"+payment.cardNetwork+"');\n";
     }
