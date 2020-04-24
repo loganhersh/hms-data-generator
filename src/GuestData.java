@@ -1,4 +1,5 @@
 import java.util.Random;
+import models.Guest;
 
 public class GuestData implements Data {
 
@@ -7,23 +8,29 @@ public class GuestData implements Data {
     Random rand = new Random();
     int id = 1000;
     String[] emailDomains = {"gmail.com","hotmail.com","yahoo.com"};
-    String street = "1234 DaWrong Lane";
-    String city = "Flonkerton";
-    String state = "MD";
-    String zip = "12345";
-    String[] lastGuest = new String[3];
+    Guest lastGuest;
 
     @Override
     public String getInsertString() {
-        String insertString = "INSERT INTO "+tableName+" VALUES("+ (id++) +",'";
         String[] name = nameGen.getName();
-        insertString += name[0]+"','"+name[1]+"','";
-        insertString += getEmail(name[0],name[1]) + "','";
-        insertString += street+"','"+city+"','"+state+"',"+zip+");";
+        lastGuest = new Guest(id++, name[0], name[1], getEmail(name[0],name[1]));
 
-
+        String insertString = "INSERT INTO "+tableName+" VALUES("+ lastGuest.id +",'";
+        insertString += lastGuest.firstname+"','"+lastGuest.lastname+"','";
+        insertString += lastGuest.email + "','";
+        insertString += lastGuest.street+"','"+lastGuest.city+"','"+lastGuest.state+"',"+lastGuest.zip+");\n";
 
         return insertString;
+    }
+
+    @Override
+    public void reset() {
+        if(this.lastGuest != null)
+        this.lastGuest = null;
+    }
+
+    public Guest getLastGuest() {
+        return lastGuest;
     }
 
     public GuestData() {

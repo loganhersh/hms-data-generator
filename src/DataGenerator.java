@@ -1,22 +1,86 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import models.Guest;
+import models.Room;
 
 public class DataGenerator {
 
     FileWriter writer;
-    String filename = "guest-data.sql";
+    static String filename = "sample-data.sql";
+    static int i;
+    String databaseName = "HMS_DB";
+
+    static DataGenerator dataGen;
+    static RoomData roomData = new RoomData();
+    static GuestData guestData = new GuestData();
+    static ReservationData resData = new ReservationData();
+    static InvoiceData invoiceData = new InvoiceData();
+    static PaymentData paymentData = new PaymentData();
+    static InvoiceChargeData invoiceChargeData = new InvoiceChargeData();
+    Data[] dataGenArr;
 
     public static void main(String[] args) {
-        GuestData guestData = new GuestData();
-        DataGenerator dataGen = new DataGenerator();
-//        dataGen.batchWrite(50, roomData);
-//        dataGen.close();
+        dataGen = new DataGenerator(filename);
+
+        // Generate Room data
+        dataGen.batchWrite(50, roomData);
+
+        for(i=0; i < 40; i++) {
+            dataGen.generateSeries();
+        }
+
+        dataGen.close();
     }
 
-    public DataGenerator() {
+    public void generateSeries() {
+        dataGen.writeLine("--------- SAMPLE "+i+" ----------\n" );
+        // generate and get guest
+        dataGen.writeLine(guestData.getInsertString());
+        Guest guest = guestData.getLastGuest();
+
+        // get room
+        Room room = roomData.getRoom();
+
+        // generate reservation
+        resData.setLastGuest(guest);
+        resData.setLastRoom(room);
+        dataGen.writeLine(resData.getInsertString());
+
+        // generate invoice
+        invoiceData.setReservation(resData.getReservation());
+        dataGen.writeLine(invoiceData.getInsertString());
+
+        // generate payment
+        paymentData.setInvoice(invoiceData.getInvoice());
+        paymentData.setGuest(guest);
+        dataGen.writeLine(paymentData.getInsertString());
+
+        // generate invoice charges
+        if(paymentData.getPayment() != null) {
+            invoiceChargeData.setInvoice(invoiceData.getInvoice());
+            dataGen.writeLine(invoiceChargeData.getInsertString());
+
+            if(invoiceChargeData.getCharge().amount < invoiceData.getInvoice().total) {
+                dataGen.writeLine(invoiceChargeData.getInsertString());
+            }
+        }
+
+        resetData();
+        flush();
+    }
+
+    public DataGenerator(String filename) {
         File file = createFile(filename);
         writer = getWriter(file);
+        dataGenArr = new Data[]{guestData, resData, invoiceData, paymentData, invoiceChargeData};
+        writeLine("USE " + databaseName + ";\n\n");
+    }
+
+    private void resetData() {
+        for(Data d : dataGenArr) {
+            d.reset();
+        }
     }
 
     private void batchWrite(int cycles, Data data) {
@@ -37,6 +101,15 @@ public class DataGenerator {
     private void close() {
         try {
             writer.close();
+        } catch(IOException e) {
+            System.out.println("Failed to close");
+            e.printStackTrace();
+        }
+    }
+
+    private void flush() {
+        try {
+            writer.flush();
         } catch(IOException e) {
             System.out.println("Failed to close");
             e.printStackTrace();
