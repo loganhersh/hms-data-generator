@@ -12,11 +12,12 @@ public class Payment {
   public String accountNumber;
   public int expirationMonth;
   public int expirationYear;
+  public int cvv;
   public String cardNetwork;
 
   public Payment(String id, String invoiceId, Date date, String type, double amount,
           String accountHolder, String accountNumber, int expirationMonth, int expirationYear,
-          String cardNetwork) {
+          int cvv, String cardNetwork) {
     this.id = id;
     this.invoiceId = invoiceId;
     this.date = date;
@@ -26,6 +27,7 @@ public class Payment {
     this.accountNumber = accountNumber;
     this.expirationMonth = expirationMonth;
     this.expirationYear = expirationYear;
+    this.cvv = cvv;
     this.cardNetwork = cardNetwork;
   }
 }

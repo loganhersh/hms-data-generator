@@ -22,7 +22,7 @@ public class PaymentData implements Data {
       return "";
     }
     payment = new Payment(getId(),invoice.id,getDate(),getType(),getAmount(),
-            getName(),getAccountNum(),getMonth(),getYear(),"Mastercard");
+            getName(),getAccountNum(),getMonth(),getYear(), getCvv(),"Mastercard");
 
     if(payment.type.equals("CA")) {
       String insertString =
@@ -35,7 +35,7 @@ public class PaymentData implements Data {
       String insertString = "INSERT INTO "+tableName+" VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
               + getDateString(payment.date)+"','"+payment.type+"',"+format(payment.amount);
       return insertString+",'"+ payment.accountHolder+"','"+payment.accountNumber+"',"+payment.expirationMonth
-              + ","+payment.expirationYear+",'"+payment.cardNetwork+"');\n";
+              + ","+payment.expirationYear+","+payment.cvv+",'"+payment.cardNetwork+"');\n";
     }
   }
 
@@ -93,6 +93,10 @@ public class PaymentData implements Data {
 
   private int getYear() {
     return 2021 + (int) (Math.random() * (2028 - 2021));
+  }
+
+  private int getCvv() {
+    return rand.nextInt(1000);
   }
 
   String getDateString(Date date) {
