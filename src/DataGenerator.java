@@ -34,7 +34,7 @@ public class DataGenerator {
     }
 
     public void generateSeries() {
-        dataGen.writeLine("--------- SAMPLE "+i+" ----------\n" );
+        dataGen.writeLine("-- ------- SAMPLE "+i+" ----------\n" );
         // generate and get guest
         dataGen.writeLine(guestData.getInsertString());
         Guest guest = guestData.getLastGuest();
