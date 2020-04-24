@@ -26,15 +26,15 @@ public class PaymentData implements Data {
 
     if(payment.type.equals("CA")) {
       String insertString =
-            "INSERT INTO "+tableName+" VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
+            "INSERT INTO "+tableName+" (payment_id,invoice_id,payment_date,"
+                    + "payment_type,payment_amount) VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
                     + getDateString(payment.date)+"','"+payment.type+"',"+format(payment.amount);
 
       return insertString+");\n";
     } else {
-      String insertString = "INSERT INTO "+tableName+" (payment_id,invoice_id,payment_date,"
-              + "payment_type,payment_amount) VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
+      String insertString = "INSERT INTO "+tableName+" VALUES ('"+payment.id+"','"+payment.invoiceId+"','"
               + getDateString(payment.date)+"','"+payment.type+"',"+format(payment.amount);
-      return insertString+",'"+ payment.accountHolder+"',"+payment.accountNumber+","+payment.expirationMonth
+      return insertString+",'"+ payment.accountHolder+"','"+payment.accountNumber+"',"+payment.expirationMonth
               + ","+payment.expirationYear+",'"+payment.cardNetwork+"');\n";
     }
   }
@@ -81,10 +81,10 @@ public class PaymentData implements Data {
     return guest.firstname + " " + guest.lastname;
   }
 
-  private long getAccountNum() {
+  private String getAccountNum() {
     long high = 9999999999999999L;
     long low = 1000000000000000L;
-    return low + (long) (Math.random() * (high - low));
+    return String.valueOf(low + (long) (Math.random() * (high - low)));
   }
 
   private int getMonth() {

@@ -9,13 +9,13 @@ public class Payment {
   public String type;
   public double amount;
   public String accountHolder;
-  public long accountNumber;
+  public String accountNumber;
   public int expirationMonth;
   public int expirationYear;
   public String cardNetwork;
 
   public Payment(String id, String invoiceId, Date date, String type, double amount,
-          String accountHolder, long accountNumber, int expirationMonth, int expirationYear,
+          String accountHolder, String accountNumber, int expirationMonth, int expirationYear,
           String cardNetwork) {
     this.id = id;
     this.invoiceId = invoiceId;
