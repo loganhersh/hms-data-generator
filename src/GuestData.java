@@ -13,12 +13,13 @@ public class GuestData implements Data {
     @Override
     public String getInsertString() {
         String[] name = nameGen.getName();
-        lastGuest = new Guest(id++, name[0], name[1], getEmail(name[0],name[1]));
+        lastGuest = new Guest(id++, name[0], name[1], getEmail(name[0],name[1]), getPhone());
 
         String insertString = "INSERT INTO "+tableName+" VALUES("+ lastGuest.id +",'";
         insertString += lastGuest.firstname+"','"+lastGuest.lastname+"','";
         insertString += lastGuest.email + "','";
-        insertString += lastGuest.street+"','"+lastGuest.city+"','"+lastGuest.state+"',"+lastGuest.zip+");\n";
+        insertString += lastGuest.street+"','"+lastGuest.city+"','"+lastGuest.state+"','"+lastGuest.zip
+                + "','"+lastGuest.phone+"');\n";
 
         return insertString;
     }
@@ -39,6 +40,22 @@ public class GuestData implements Data {
 
     private String getEmail(String first, String last) {
         return first.charAt(0) + last + "@" + emailDomains[rand.nextInt(emailDomains.length)];
+    }
+
+    private String getPhone() {
+        String phone = "";
+        phone += fillPrecedingZeros(3, String.valueOf(rand.nextInt(1000)));
+        phone += "-" + fillPrecedingZeros(3, String.valueOf(rand.nextInt(1000)));
+        phone += "-" + fillPrecedingZeros(4, String.valueOf(rand.nextInt(10000)));
+        return phone;
+    }
+
+    private String fillPrecedingZeros(int desiredStringLength, String num) {
+        String zeros = "";
+        for(int i=0; i<desiredStringLength-num.length(); i++) {
+            zeros += "0";
+        }
+        return zeros + num;
     }
 
 }
