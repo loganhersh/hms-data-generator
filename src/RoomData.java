@@ -20,7 +20,7 @@ public class RoomData implements Data{
     }
 
     public String getInsertString() {
-        Room room = new Room(getCol1Val(),getCol2Val(), getCol3Val());
+        Room room = new Room(getId(), getInService(), getType());
         rooms.add(room);
         return "INSERT INTO " + tableName + " VALUES (" + room.id + "," + room.inService + ","
                         + "'" + room.type + "');\n";
@@ -29,22 +29,31 @@ public class RoomData implements Data{
     @Override
     public void reset() {}
 
-    int getCol1Val() {
+    int getId() {
         int id = rand.nextInt(1000);
+        while(roomExists(id)) {
+            id = rand.nextInt(1000);
+        }
         return id;
     }
 
-    boolean getCol2Val() {
+    boolean getInService() {
         int x = rand.nextInt(100);
         return (x > 25);
     }
 
-    String getCol3Val() {
-
+    String getType() {
         return types[rand.nextInt(5)];
     }
 
     public Room getRoom() {
         return rooms.get(rand.nextInt(rooms.size()));
+    }
+
+    private boolean roomExists(int id) {
+        for(Room r : rooms) {
+            if(r.id == id) return true;
+        }
+        return false;
     }
 }

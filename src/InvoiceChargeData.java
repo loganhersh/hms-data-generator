@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Random;
 import models.Invoice;
 import models.InvoiceCharge;
+import models.Reservation;
 
 public class InvoiceChargeData implements Data {
 
@@ -14,6 +15,7 @@ public class InvoiceChargeData implements Data {
   String[] reasons = {"Base room charge","Room Service","Cleaning fee"};
   int x = 1;
   InvoiceCharge charge;
+  Reservation reservation;
 
   @Override
   public String getInsertString() {
@@ -28,14 +30,15 @@ public class InvoiceChargeData implements Data {
     this.invoice = invoice;
   }
 
+  public void setReservation(Reservation r) { this.reservation = r; }
+
   public InvoiceCharge getCharge() {
     return charge;
   }
 
   private Date getDateApplied() {
     Calendar c = Calendar.getInstance();
-    c.setTime(new Date());
-    c.add(Calendar.DATE, 1);
+    c.setTime(reservation.checkIn);
     return c.getTime();
   }
 
@@ -45,7 +48,7 @@ public class InvoiceChargeData implements Data {
 
   public void reset() {
     this.charge = null;
-    this.x = 0;
+    this.x = 1;
   }
 
   private double getAmount() {

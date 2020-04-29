@@ -19,8 +19,7 @@ public class ReservationData implements Data {
     buildReservation();
     String insertString = "INSERT INTO "+tableName+" VALUES ('"+res.id+"',";
     insertString += res.guestId+","+res.roomId+",'"+res.roomtype+"','";
-    insertString += getDateString(res.checkIn)+"','"+getDateString(res.checkOut)+"',";
-    insertString += res.numDays+");\n";
+    insertString += getDateString(res.checkIn)+"','"+getDateString(res.checkOut)+"');\n";
     return insertString;
   }
 
@@ -65,7 +64,7 @@ public class ReservationData implements Data {
     Date current = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(current);
-    c.add(Calendar.DATE, rand.nextInt(100)+20);
+    c.add(Calendar.DATE, rand.nextInt(365)+20);
     return c.getTime();
   }
 
