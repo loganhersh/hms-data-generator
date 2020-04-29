@@ -49,22 +49,26 @@ public class DataGenerator {
 
         // generate invoice
         invoiceData.setReservation(resData.getReservation());
-        dataGen.writeLine(invoiceData.getInsertString());
+        String invoiceString = invoiceData.getInsertString();
+        // dataGen.writeLine(invoiceData.getInsertString());    // Created through mysql trigger
 
         // generate payment
         paymentData.setInvoice(invoiceData.getInvoice());
         paymentData.setGuest(guest);
-        dataGen.writeLine(paymentData.getInsertString());
+        String paymentString = paymentData.getInsertString();    // write payment after charges
 
         // generate invoice charges
         if(paymentData.getPayment() != null) {
             invoiceChargeData.setInvoice(invoiceData.getInvoice());
+            invoiceChargeData.setReservation(resData.getReservation());
             dataGen.writeLine(invoiceChargeData.getInsertString());
 
             if(invoiceChargeData.getCharge().amount < invoiceData.getInvoice().total) {
                 dataGen.writeLine(invoiceChargeData.getInsertString());
             }
         }
+
+        dataGen.writeLine(paymentString);
 
         resetData();
         flush();
