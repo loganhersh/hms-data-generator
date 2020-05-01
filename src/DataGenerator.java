@@ -24,7 +24,7 @@ public class DataGenerator {
         dataGen = new DataGenerator(filename);
 
         // Generate Room data
-        dataGen.batchWrite(50, roomData);
+        dataGen.batchWrite(20, roomData);
 
         for(i=0; i < 40; i++) {
             dataGen.generateSeries();
