@@ -23,7 +23,7 @@ public class RoomData implements Data{
         Room room = new Room(getId(), getInService(), getType());
         rooms.add(room);
         return "INSERT INTO " + tableName + " VALUES (" + room.id + "," + room.inService + ","
-                        + "'" + room.type + "');\n";
+                        + "'" + room.type + "',"+room.isVacant+");\n";
     }
 
     @Override
