@@ -11,6 +11,7 @@ public class Reservation {
   public Date checkIn;
   public Date checkOut;
   public int numDays;
+  public String status;
 
   public Reservation(String id, int guestId, int roomId, String roomtype, Date checkIn,
           Date checkOut) {
@@ -21,6 +22,7 @@ public class Reservation {
     this.checkIn = checkIn;
     this.checkOut = checkOut;
     this.numDays = (int) getDateDiff(checkIn, checkOut, TimeUnit.DAYS);
+    this.status = "active";
   }
 
   public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {

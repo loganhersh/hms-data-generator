@@ -19,7 +19,7 @@ public class ReservationData implements Data {
     buildReservation();
     String insertString = "INSERT INTO "+tableName+" VALUES ('"+res.id+"',";
     insertString += res.guestId+","+res.roomId+",'"+res.roomtype+"','";
-    insertString += getDateString(res.checkIn)+"','"+getDateString(res.checkOut)+"');\n";
+    insertString += getDateString(res.checkIn)+"','"+getDateString(res.checkOut)+"',null,'"+res.status+"');\n";
     return insertString;
   }
 
