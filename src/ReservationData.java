@@ -1,4 +1,5 @@
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -10,6 +11,7 @@ public class ReservationData implements Data {
 
   String tableName = "RESERVATION";
   Random rand = new Random();
+  static ArrayList<Reservation> reservations = new ArrayList<>();
   Reservation res;
   Guest lastGuest;
   Room lastRoom;
@@ -48,8 +50,26 @@ public class ReservationData implements Data {
     Date checkIn = getCheckInDate();
     Date checkOut = getCheckOutDate(checkIn);
     String roomtype = lastRoom.type;
+    String status;
+    String roomId;
+    if(!checkIn.before(new Date())) {
+      roomId = "null";
+      status = getStatus(false);
+    } else {
+      roomId = String.valueOf(lastRoom.id);
+      status = getStatus(true);
+    }
     String id = getIdString(checkIn);
-    res = new Reservation(id, guestId, lastRoom.id, roomtype, checkIn, checkOut);
+    res = new Reservation(id, guestId, roomId, roomtype, checkIn, checkOut, status);
+    // reservations.add(res);
+  }
+
+  String getStatus(boolean isPast) {
+    if(isPast) {
+      return (rand.nextInt(100) < 10) ? "cancelled" : "complete";
+    } else {
+      return (rand.nextInt(100) < 10) ? "cancelled" : "active";
+    }
   }
 
   String getIdString(Date date) {
@@ -64,14 +84,15 @@ public class ReservationData implements Data {
     Date current = new Date();
     Calendar c = Calendar.getInstance();
     c.setTime(current);
-    c.add(Calendar.DATE, rand.nextInt(365)+20);
+    c.add(Calendar.DATE, -365);
+    c.add(Calendar.DATE, rand.nextInt(365*2));
     return c.getTime();
   }
 
   Date getCheckOutDate(Date checkInDate) {
     Calendar c = Calendar.getInstance();
     c.setTime(checkInDate);
-    c.add(Calendar.DATE, rand.nextInt(3)+1);
+    c.add(Calendar.DATE, rand.nextInt(5)+1);
     return c.getTime();
   }
 

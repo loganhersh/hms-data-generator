@@ -10,6 +10,8 @@ public class RoomData implements Data{
     String[] types = {"KI","QD","KS","QS","KJ"};
     Double[] roomPrices = {79.99,89.99,99.99,109.99,129.99};
     static HashMap<String, Double> roomtypes = new HashMap<>();
+    static int lastRoomTypeIndex = 0;
+    static int lastRoomId = 100;
     int index = 0;
     ArrayList<Room> rooms = new ArrayList<>();
 
@@ -30,11 +32,12 @@ public class RoomData implements Data{
     public void reset() {}
 
     int getId() {
-        int id = rand.nextInt(1000);
-        while(roomExists(id)) {
-            id = rand.nextInt(1000);
+        if(lastRoomId == 120) {
+            lastRoomId = 200;
+        } else {
+            lastRoomId++;
         }
-        return id;
+        return lastRoomId;
     }
 
     boolean getInService() {
@@ -43,7 +46,17 @@ public class RoomData implements Data{
     }
 
     String getType() {
-        return types[rand.nextInt(5)];
+        return types[getNextIndex()];
+    }
+
+    int getNextIndex() {
+        if(lastRoomTypeIndex == types.length-1) {
+            lastRoomTypeIndex = 0;
+            return 0;
+        } else {
+            lastRoomTypeIndex++;
+            return lastRoomTypeIndex;
+        }
     }
 
     public Room getRoom() {
